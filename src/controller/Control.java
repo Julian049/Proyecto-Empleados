@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.ArrayList;
+
 import exceptions.DuplicateException;
 import model.Business;
 import model.Date;
@@ -84,7 +86,10 @@ public class Control {
 			io.showGraphicMessage("Digite la fecha de nacimiento del empleado");
 			employee.setBirthDate(this.getDate());
 			io.showGraphicMessage("Digite la fecha de contratación del empleado");
-			employee.setHireDate(this.getDate());
+			//Se crea un array para almacenar cada fecha de contratacion
+			ArrayList<Date> hireDates = new ArrayList<>();
+			hireDates.add(getDate());
+			employee.setHireDate(hireDates);
 			business.addEmployee(employee);
 		} catch (DuplicateException duplicateException) {
 			io.showErrorGraphicMessage(duplicateException.getMessage());
@@ -131,7 +136,7 @@ public class Control {
 					business.findEmployee(id).setBirthDate(this.getDate());
 					break;
 				case 7:
-					business.findEmployee(id).setHireDate(this.getDate());
+					business.findEmployee(id).addHireDate(this.getDate());
 					break;
 				case 8:
 					io.showGraphicMessage("Los datos del empleado han sido modificados con éxito");
@@ -155,6 +160,6 @@ public class Control {
 		double bonus = io.readGraphicDouble("Ingrese alguna bonificación extra: ");
 		double deductions = io.readGraphicDouble("Ingrese el valor de la multa: ");
 		double liquidation = business.calculateLiquidation(id, bonus, deductions);
-		io.showGraphicMessage("El empleado " + business.findEmployee(id).getFirstName() + " " + business.findEmployee(id).getLastName() + " con ID " + id + " ha sido liquidado con un valor de: " + liquidation);
+		io.showGraphicMessage("El empleado con ID " + id + " ha sido liquidado con un valor de: " + liquidation + "$");
 	}
 }

@@ -126,8 +126,12 @@ public class Business {
 			employeeData = input.split(",");
 			Employee employee = new Employee(Short.parseShort(employeeData[0]), employeeData[1], employeeData[2],
 					Double.parseDouble(employeeData[3]), Byte.parseByte(employeeData[4]),
-					Double.parseDouble(employeeData[5]), this.createDate(employeeData[6]),
-					this.createDate(employeeData[7]));
+					Double.parseDouble(employeeData[5]), this.createDate(employeeData[6]), new ArrayList<Date>());
+
+			//Se añade un ciclo for para leer las distintas fechas de contratación
+			for (int i = 7; i < employeeData.length; i++) {
+				employee.addHireDate(this.createDate(employeeData[i]));
+			}
 			this.addEmployee(employee);
 		}
 		myFile.closeFile();
@@ -145,7 +149,15 @@ public class Business {
 			output += employee.getNumberChildren() + ",";
 			output += employee.getCommission() + ",";
 			output += employee.getBirthDate() + ",";
-			output += employee.getHireDate();
+
+			//Se añade un ciclo for para añadir las distintas fechas de contratación
+			ArrayList<Date> hireDates = employee.getHireDates();
+			for (int i = 0; i < hireDates.size(); i++) {
+				output += hireDates.get(i);
+				if (i < hireDates.size() - 1) {
+					output += ",";
+				}
+			}
 			myFile.record(output);
 		}
 		myFile.closeFile();
@@ -154,16 +166,22 @@ public class Business {
 	public int monthsWorked(Date date) {
 		Employee employee = new Employee();
 		int output = 0;
-		output = (employee.getDistanceBetweenDates(date)*12);
+		output = (employee.getDistanceBetweenDates(date) * 12);
 		return output;
 	}
 
 	public double calculateLiquidation(short id, double bonus, double reductions) {
 		double output = 0;
 		Employee employee = this.findEmployee(id);
-		output = ((employee.getSalary() * this.monthsWorked(employee.getHireDate())) + (employee.getSalary() * employee.getCommission()) + bonus) - reductions;
+		output = ((employee.getSalary() * this.monthsWorked(employee.getHireDate(employee.hireDates.size() - 1)))
+				+ (employee.getSalary() * employee.getCommission()) + bonus) - reductions;
 		this.deleteEmployee(id);
 		return output;
+	}
+
+	public void addHireDate(short id, Date date) {
+		Employee employee = this.findEmployee(id);
+		employee.addHireDate(date);
 	}
 
 	@Override

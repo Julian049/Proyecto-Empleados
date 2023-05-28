@@ -102,7 +102,7 @@ public class IoManager {
 				"4. Modificar numero de hijos \n" +
 				"5. Modificar comisión \n" +
 				"6. Modificar la fecha de nacimiento \n" +
-				"7. Modificar la fecha de contratación \n" +
+				"7. Añadir la fecha de contratación \n" +
 				"8. Salir \n";
 		return this.readGraphicInt(options);
 	}
